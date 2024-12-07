@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Service;
 using UniGLTF;
 using UnityEngine;
+using Utils;
 
 public class PainterD3SceneController : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class PainterD3SceneController : MonoBehaviour
     private LocalModelLibraryManager _localModelLibraryManager;
 
     private Vector2 initialTouchDistance; // 双指初始距离
+    private float defaultScale; // 初始模型缩放比例
     private float initialScale; // 初始模型缩放比例
     private Vector3 initialModelPosition; // 初始模型位置
     private bool isPinching = false; // 是否正在缩放
@@ -44,6 +46,7 @@ public class PainterD3SceneController : MonoBehaviour
                 Vector3 size = GetObjectSize(_modelGameObject);
                 float maxDirection = Math.Max(size.x, Math.Max(size.y, size.z));
                 _modelGameObject.transform.localScale = new Vector3(modelSize / maxDirection, modelSize / maxDirection, modelSize / maxDirection);
+                defaultScale = _modelGameObject.transform.localScale.x;
                 Debug.Log("3D模型加载成功" + size);
             });
     }
@@ -164,7 +167,12 @@ public class PainterD3SceneController : MonoBehaviour
                 // 缩放处理
                 Vector2 currentTouchDistance = touch1Pos - touch2Pos;
                 float scaleFactor = currentTouchDistance.magnitude / initialTouchDistance.magnitude;
-                _modelGameObject.transform.localScale = Vector3.one * initialScale * scaleFactor;
+                
+                Vector3 newScale = Vector3.one * initialScale * scaleFactor;
+                _modelGameObject.transform.localScale = new Vector3(
+                    Mathf.Clamp(newScale.x, defaultScale * 0.5f, defaultScale * 5.0f),
+                    Mathf.Clamp(newScale.y, defaultScale * 0.5f, defaultScale * 5.0f),
+                    Mathf.Clamp(newScale.z, defaultScale * 0.5f, defaultScale * 5.0f));
 
                 // 平移处理
                 Vector2 currentPanPosition = (touch1Pos + touch2Pos) / 2;
