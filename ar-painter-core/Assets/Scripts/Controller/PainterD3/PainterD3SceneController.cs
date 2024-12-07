@@ -12,11 +12,12 @@ public class PainterD3SceneController : MonoBehaviour
     private Vector2 previousTouchPosition; // 上一次触摸位置
     private Vector2 touchDelta; // 当前的触摸/鼠标移动量
     private bool isDragging = false; // 是否正在拖拽
-    public float rotationSpeed = 100f; // 旋转速度
-    public float inertiaFactor = 0.1f; // 惯性系数（阻尼效果）
+    private readonly float rotationSpeed = 4f; // 旋转速度
+    private readonly float inertiaFactor = 2f; // 惯性系数（阻尼效果）
     private float modelSize = 12f;
     private Vector2 velocity; // 旋转速度
     private Vector2 velocitySmoothDamp; // 平滑的旋转速度
+    private readonly float screenFactor = Screen.width * 0.001f;
 
     private LocalModelLibraryManager _localModelLibraryManager;
     
@@ -109,7 +110,8 @@ public class PainterD3SceneController : MonoBehaviour
                 previousTouchPosition = touch.position;
 
                 // 计算旋转速度（触摸移动量）
-                velocity = touchDelta * rotationSpeed * Time.deltaTime;
+                Debug.Log($"speed: {rotationSpeed}");
+                velocity = (touchDelta / this.screenFactor) * rotationSpeed * Time.deltaTime;
                 velocitySmoothDamp = velocity; // 将当前速度设置为平滑速度的起始值
                 RotateTarget(velocity);
             }
