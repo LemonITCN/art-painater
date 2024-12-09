@@ -33,7 +33,8 @@ public class PainterD3SceneController : MonoBehaviour
     void Start()
     {
         _localModelLibraryManager = gameObject.AddComponent<LocalModelLibraryManager>();
-        _localModelLibraryManager.DownloadResource("https://common-resource-1302067637.cos.ap-beijing.myqcloud.com/tyrannosaurus-rex.glb",
+        _localModelLibraryManager.DownloadResource("https://common-resource-1302067637.cos.ap-beijing.myqcloud.com/football.glb",
+        // _localModelLibraryManager.DownloadResource("https://common-resource-1302067637.cos.ap-beijing.myqcloud.com/tyrannosaurus-rex.glb",
             resPath =>
             {
                 GltfData gltfData = new GlbFileParser(resPath).Parse();

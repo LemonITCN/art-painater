@@ -28,6 +28,10 @@ namespace Service
         // 下载文件异步
         IEnumerator DownloadFileAsync(string url, string path, Action onSuccess)
         {
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
             if (!File.Exists(path))
             {
                 LogUtil.Info("开始下载文件Async:" + url);
